@@ -1,0 +1,104 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  firstName  String
+  lastName   String
+  password   String
+  role       String
+  avatar     String?
+  department String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Candidate {
+  id          String       @id @default(uuid())
+  firstName   String
+  lastName    String
+  email       String       @unique
+  phone       String?
+  status      String
+  position    String
+  department  String?
+  source      String?
+  appliedDate String
+  resumeUrl   String?
+  skills      Skill[]
+  interviews  Interview[]
+  offers      Offer[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Skill {
+  id          String     @id @default(uuid())
+  name        String
+  category    String?
+  candidates  Candidate[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Interview {
+  id            String      @id @default(uuid())
+  candidateId   String
+  candidateName String
+  position      String
+  type          String
+  status        String
+  date          String
+  startTime     String
+  endTime       String
+  interviewers  String[]
+  location      String?
+  videoLink     String?
+  notes         String?
+  timeZone      String?
+  candidate     Candidate   @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  feedback      Feedback[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Feedback {
+  id             String     @id @default(uuid())
+  interviewId    String
+  evaluatorId    String
+  evaluatorName  String
+  overallRating  Int
+  recommendation String
+  strengths      String?
+  weaknesses     String?
+  notes          String?
+  submittedAt    String
+  interview      Interview  @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model Offer {
+  id            String    @id @default(uuid())
+  candidateId   String
+  candidateName String
+  position      String
+  department    String
+  status        String
+  salary        Int
+  startDate     String?
+  expirationDate String
+  notes         String?
+  candidate     Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}

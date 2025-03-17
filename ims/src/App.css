@@ -1,0 +1,26 @@
+
+/* Custom styles for the InterviewPro application */
+/* Most styles are now handled by Tailwind and index.css */
+
+/* Ensure full height on mobile devices */
+html, body, #root {
+  height: 100%;
+}
+
+/* Remove default styles */
+*:focus {
+  outline: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Additional responsive fixes */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
